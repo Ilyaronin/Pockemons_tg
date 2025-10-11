@@ -11,12 +11,23 @@ class Pokemon:
         self.pokemon_number = randint(1,1000)
         self.img = self.get_img()
         self.name = self.get_name()
+        self.hp = self.get_hp()
+        self.attack = self.get_at()
+        
+        
 
         Pokemon.pokemons[pokemon_trainer] = self
 
     # Метод для получения картинки покемона через API
     def get_img(self):
-        pass
+        url = f'https://pokeapi.co/api/v2/pokemon/{self.pokemon_number}'
+        response = requests.get(url)
+        if response.status_code == 200:
+            data = response.json()
+            return (data['sprites']['front_default'])
+        else:
+            return "Pikachu"
+        
     
     # Метод для получения имени покемона через API
     def get_name(self):
@@ -27,6 +38,27 @@ class Pokemon:
             return (data['forms'][0]['name'])
         else:
             return "Pikachu"
+    
+    def get_hp(self):
+        url = f'https://pokeapi.co/api/v2/pokemon/{self.pokemon_number}'
+        response = requests.get(url)
+        if response.status_code == 200:
+            data = response.json()
+            return (data['stats'][0]['base_stat'])
+        else:
+            return "Pikachu"
+        
+    def get_at(self):
+        url = f'https://pokeapi.co/api/v2/pokemon/{self.pokemon_number}'
+        response = requests.get(url)
+        if response.status_code == 200:
+            data = response.json()
+            return (data['stats'][1]['base_stat'])
+        else:
+            return "Pikachu"
+
+    
+   
 
 
     # Метод класса для получения информации
@@ -36,6 +68,9 @@ class Pokemon:
     # Метод класса для получения картинки покемона
     def show_img(self):
         return self.img
+    
+    def show_stat(self):
+        return f"Здоровье: {self.hp}, аттака: {self.attack}"
 
 
 
