@@ -31,9 +31,9 @@ def attack_pok(message):
     if message.reply_to_message:
         if message.reply_to_message.from_user.username in Pokemon.pokemons.keys() and message.from_user.username in Pokemon.pokemons.keys():
             enemy = Pokemon.pokemons[message.reply_to_message.from_user.username]
-            pok = Pokemon.pokemons[message.from_user.username]
-            res = pok.attack(enemy)
-            bot.send_message(message.chat.id, res)
+            pokemon = Pokemon.pokemons[message.from_user.username]
+            result = pokemon.attack(enemy)
+            bot.send_message(message.chat.id, result)
         else:
             bot.send_message(message.chat.id, "Сражаться можно только с покемонами")
     else:
@@ -42,9 +42,21 @@ def attack_pok(message):
 
 @bot.message_handler(commands=['info'])
 def info(message):
-    pokemon = Pokemon.pokemons[message.from_user.username]
-    bot.send_message(message.chat.id, pokemon.info())
-    bot.send_photo(message.chat.id, pokemon.show_img())
+    if message.from_user.username in Pokemon.pokemons.keys():
+        pokemon = Pokemon.pokemons[message.from_user.username]
+        bot.send_message(message.chat.id, pokemon.info())
+        bot.send_photo(message.chat.id, pokemon.show_img())
+    else:
+        bot.send_message(message.chat.id,"У тебя нету покемона")
+
+@bot.message_handler(commands=['feed'])
+def feed(message):
+    if message.from_user.username in Pokemon.pokemons.keys():
+        pokemon = Pokemon.pokemons[message.from_user.username]
+        bot.send_message(message.chat.id, pokemon.feed())
+    else:
+        bot.send_message(message.chat.id,"У тебя нету покемона")
+
     
 
 
