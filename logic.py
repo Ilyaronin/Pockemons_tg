@@ -1,4 +1,5 @@
 from random import randint
+import datetime
 
 import requests
 
@@ -17,9 +18,22 @@ class Pokemon:
         self.hp = randint(20, 40)
         self.power = randint(5, 15)
 
+        self.last_feed_time = datetime.datetime.now()
+
         Pokemon.pokemons[pokemon_trainer] = self
 
+    def feed(self, feed_interval = 20, hp_increase = 10 ):
+        current_time = datetime.datetime.now()  
+        delta_time = datetime.timedelta(seconds=feed_interval)  
+        if (current_time - self.last_feed_time) > delta_time:
+            self.hp += hp_increase
+            self.last_feed_time = current_time
+            return f"Здоровье покемона увеличено. Текущее здоровье: {self.hp}"
+        else:
+            return f"Следующее время кормления покемона: {self.last_feed_time+delta_time}"
+
     def attack(self, enemy):
+         
         if isinstance(enemy, Wizard): # Проверка на то, что enemy является типом данных Wizard (является экземпляром класса Волшебник)
             chance = randint(1,5)
             if chance == 1:
@@ -31,6 +45,7 @@ class Pokemon:
                 else:
                     enemy.hp = 0
                     return f" Враг повержен"
+      
 
 
     # Метод для получения картинки покемона через API
@@ -54,7 +69,7 @@ class Pokemon:
             return "Pikachu"
         
     def info(self):
-        return f"Имя твоего покеомона: {self.name}, здоровье {self.hp}, атака: {self.power}"
+        return f"Имя твоего покемона: {self.name}, здоровье {self.hp}, атака: {self.power}"
 
     # Метод класса для получения картинки покемона
     def show_img(self):
@@ -66,17 +81,17 @@ class Fighter(Pokemon):
         super_pow = randint(5,15)
         self.power += super_pow
         result = super().attack(enemy)
-        self.сила -= super_pow
-        return result + f"\nБоец применил супер-атаку силой:{result} "
+        self.power -= super_pow
+        return result + f"\nБоец применил супер-атаку"
     
     def info(self):
-        return f"Имя твоего покеомона: {self.name}, здоровье {self.hp}, атака: {self.power}. У тебя покемон-боец"
+        return f"Имя твоего покемона: {self.name}, здоровье {self.hp}, атака: {self.power}. У тебя покемон-боец"
     
 class Wizard(Pokemon):
     
 
     def info(self):
-        return f"Имя твоего покеомона: {self.name}, здоровье {self.hp}, атака: {self.power}. У тебя покемон-волшебник"
+        return f"Имя твоего покемона: {self.name}, здоровье {self.hp}, атака: {self.power}. У тебя покемон-волшебник"
     
         
 
